@@ -2,3 +2,4 @@ output/*
 *.py[cod]
 venv/
 develop_server.sh
+knitpages.R
