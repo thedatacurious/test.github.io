@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = 'Alexandra'
 SITENAME = 'The Data Curious'
-SITEURL = ''
+SITEURL = 'http://thedatacurious.github.io/'
 FAVICON = '/images/favicon.ico'
 PATH = 'content'
 
