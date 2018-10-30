@@ -1,0 +1,19 @@
+img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 2.5em auto
+}
+
+code,
+tt {
+    position: relative;
+    margin: 0 0.333em;
+    padding: 0.333em 0.666em;
+    font-family: 'Inconsolata', monospace, sans-serif;
+    font-size: 0.6em;
+    white-space: pre;
+    background: #faf9f7;
+    border: 1px solid #e5e4e1;
+    top: -2px
+}

@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = 'Alexandra'
 SITENAME = 'The Data Curious'
-SITEURL = 'http://thedatacurious.github.io/'
+SITEURL = 'http://thedatacurious.github.io'
 FAVICON = '/images/favicon.ico'
 PATH = 'content'
 
@@ -26,7 +26,7 @@ THEME = 'attila'
 HEADER_COVER = 'images/main_cover.jpg'
 COLOR_SCHEME_CSS = 'monokai.css'
 LOAD_CONTENT_CACHE = False
-
+CSS_OVERRIDE = ['myblog.css']
 
 # Social widget
 SOCIAL = (('tableau', 'https://public.tableau.com/profile/alexandra2756#!/'),

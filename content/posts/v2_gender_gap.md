@@ -30,7 +30,8 @@ library(dplyr)
 
 ```r
 library(tidyr)
-genderindex <- read.csv("data.csv") # Read in Gender Gap Index data
+# Read in Gender Gap Index data
+genderindex <- read.csv("data.csv")
 ```
 
 Data on percentage of female STEM graduates can be found at [UNESCO's data portal on education](http://data.uis.unesco.org/Index.aspx?DataSetCode=EDULIT_DS). In the left tab, select *Completion* > *Percentage of tertiary graduates* > *Percentage of female graduates by field of study*.
@@ -52,14 +53,16 @@ The unzipped content includes some metadata files but only the main file is of i
 
 
 ```r
-GDPcapita <- read.csv("API_NY.GDP.PCAP.CD_DS2_en_csv_v2_10134337.csv", skip = 4) # Read in countries' GDP per capita data
+# Read in countries' GDP per capita data
+GDPcapita <- read.csv("API_NY.GDP.PCAP.CD_DS2_en_csv_v2_10134337.csv", skip = 4)
 ```
 
 For regional groupings, we will refer to the UN Statistics Division's [methodology](https://unstats.un.org/unsd/methodology/m49/overview/#). Click on the *language* tab of choice for options to load the data.
 
 
 ```r
-geogrp <- read.csv("UNSD — Methodology.csv") # Read in regional groupings data
+# Read in regional groupings data
+geogrp <- read.csv("UNSD — Methodology.csv")
 ```
 
 ## Preview and clean the data
@@ -91,10 +94,15 @@ str(genderindex)
 ```
 
 ```r
-genderindex2 <- genderindex %>% gather(Year, Score, X2006:X2016) %>% subset(Indicator == "Overall Global Gender Gap Index" & Subindicator.Type == "Index")  #Reshape the data from 'wide' to 'long' form and select rows that meet conditions
-genderindex2 <- genderindex2[, c("Country.Name", "Country.ISO3","Year","Score")] #Keep only columns of interest
-genderindex2 <- rename(genderindex2, Country = Country.Name, Code = Country.ISO3) # Rename  variables to keep things tidier
-genderindex2$Year <- sub("^.","",genderindex2$Year) # Use regrex to remove the 'x' in front of the year
+ #Reshape the data from 'wide' to 'long' form
+ #Select rows that meet conditions
+genderindex2 <- genderindex %>% gather(Year, Score, X2006:X2016) %>% subset(Indicator == "Overall Global Gender Gap Index" & Subindicator.Type == "Index")
+#Keep only columns of interest
+genderindex2 <- genderindex2[, c("Country.Name", "Country.ISO3","Year","Score")]
+ # Rename  variables to keep things tidier
+genderindex2 <- rename(genderindex2, Country = Country.Name, Code = Country.ISO3)
+# Use regrex to remove the 'x' in front of the year
+genderindex2$Year <- sub("^.","",genderindex2$Year)
 ```
 We will do the same for *femSTEM*.
 
@@ -117,8 +125,10 @@ str(femSTEM)
 ```
 
 ```r
-femSTEM2 <- femSTEM[, c("LOCATION", "Country", "Time", "Value")]
-femSTEM2 <- rename(femSTEM2, Code = LOCATION, Year = Time, PercentageFemGrad = Value)
+femSTEM2 <- femSTEM[, c("LOCATION", "Country",
+"Time", "Value")]
+femSTEM2 <- rename(femSTEM2, Code = LOCATION,
+  Year = Time, PercentageFemGrad = Value)
 femSTEM2$Year <- as.character.Date(femSTEM2$Year)
 ```
 
@@ -197,9 +207,13 @@ str(GDPcapita)
 ```
 
 ```r
-GDPcapita2 <- GDPcapita %>% gather(Year, GDPcapitaUSD, X1960:X2017) %>%  rename(Country = Country.Name, Code = Country.Code)
+GDPcapita2 <- GDPcapita %>%
+gather(Year, GDPcapitaUSD, X1960:X2017) %>%
+rename(Country = Country.Name, Code = Country.Code)
 GDPcapita2 <- GDPcapita2[, c("Country", "Code", "GDPcapitaUSD","Year")]
-GDPcapita2$Year <- sub("^.","",GDPcapita2$Year) # Use regrex to remove the 'x' in front of the year
+# Use regrex to remove the 'x' in front of the year
+GDPcapita2$Year <- sub("^.","",GDPcapita2$Year)
+
 ```
 ...as well as for geogrp. It looks like no change is required except a little renaming for consistency.
 
@@ -280,7 +294,8 @@ test$Country
 
 ```r
 GDPcapita3 <- subset(GDPcapita2, Year == "2016" & !is.na(GDPcapitaUSD))
-combined2 <- Reduce(function(...) merge(..., by= c("Code")), list(femSTEM3, genderindex3,GDPcapita3,geogrp)) #Use Reduce function to merge more than 2 dataframes simultaneously
+combined2 <- Reduce(function(...) merge(..., by= c("Code")), list(femSTEM3, genderindex3,GDPcapita3,geogrp))
+#Use Reduce function to merge more than 2 dataframes simultaneously
 ```
 
 ## Visualise the data
@@ -290,7 +305,8 @@ Let's start with a basic scatterplot. This [ggplot tutorial](http://t-redactyl.i
 
 ```r
 library(ggplot2)
-p <- ggplot(combined2, aes(x= PercentageFemGrad, y =Score)) + geom_point()
+p <- ggplot(combined2, aes(x= PercentageFemGrad, y =Score))
++ geom_point()
 p
 ```
 
@@ -299,7 +315,9 @@ Let's weigh the points with the GDPcapitaUSD variable and change their shape to 
 
 
 ```r
-p <- ggplot(combined2, aes(x= PercentageFemGrad, y =Score, size = GDPcapitaUSD)) + geom_point(shape = 21)
+p <- ggplot(combined2, aes(x= PercentageFemGrad,
+  y = Score, size = GDPcapitaUSD))
+  + geom_point(shape = 21)
 p
 ```
 
@@ -320,7 +338,8 @@ It's harder to see what's going on so we'll retain the earlier 'zoomed in' versi
 
 ```r
 p <- ggplot(combined2, aes(x= PercentageFemGrad, y =Score, size = GDPcapitaUSD, fill = Sub.region.Name)) + geom_point(shape = 21, alpha = 0.5)
-#Add fill according to Sub.region.Name variable and adjust transparency of circles' fill
+#Add fill according to Sub.region.Name variable
+#Adjust transparency of circles' fill
 p
 ```
 
@@ -345,7 +364,11 @@ For the finishing touches, we will edit the sizes, labels, and background themes
 p <- ggplot(combined2, aes(x= PercentageFemGrad, y =Score, size = GDPcapitaUSD, fill = Sub.region.Name)) + geom_point(shape = 21, alpha = 0.5) + scale_size_continuous(range = c(1, 10)) +
   #Adjusts the range of the minimum and maximum point size
   geom_text(data = subset(combined2, PercentageFemGrad > 50 | Score > 0.8 ), aes(label = Country.x), family = "Georgia", size = 2 , nudge_x = 0.01, nudge_y = -0.015) +
-  #Labels data points for countries where percentage of female gradutes in STEM is more than 50% or score in Gender Gap index is greater than 0.8. Adjusts positions of labels.
+  #Labels data points for countries where
+  #percentage of female graduates
+  #in STEM is more than 50% or score in Gender Gap index
+  #is greater than 0.8.
+  #Adjusts positions of labels.
   theme_bw() +
   theme() +
   ggtitle("In more gender-equal countries, are women less likely to be in STEM?")+

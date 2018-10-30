@@ -2,7 +2,7 @@
 Title: About
 Date: 2018-10-14 04:03
 Slug: about
-cover: images/about_cover.jpg
+Cover: images/about_cover.jpg
 Tags: about
 ---
 
