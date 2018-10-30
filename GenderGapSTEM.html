@@ -33,6 +33,10 @@
   <!-- Code highlight color scheme -->
       <link href="/theme/css/code_blocks/monokai.css" rel="stylesheet">
 
+    <!-- CSS specified by the user -->
+
+
+    <link href="/myblog.css" type="text/css" rel="stylesheet" />
 
   <!-- Custom fonts -->
   <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300' rel='stylesheet' type='text/css' />
@@ -156,7 +160,8 @@
 
 
 <div class="highlight"><pre><span></span><span class="kn">library</span><span class="p">(</span>tidyr<span class="p">)</span>
-genderindex <span class="o">&lt;-</span> read.csv<span class="p">(</span><span class="s">&quot;data.csv&quot;</span><span class="p">)</span> <span class="c1"># Read in Gender Gap Index data</span>
+<span class="c1"># Read in Gender Gap Index data</span>
+genderindex <span class="o">&lt;-</span> read.csv<span class="p">(</span><span class="s">&quot;data.csv&quot;</span><span class="p">)</span>
 </pre></div>
 
 
@@ -169,12 +174,14 @@ genderindex <span class="o">&lt;-</span> read.csv<span class="p">(</span><span c
 <p>Data on countries' GDP per capita (current US dollars) can be found at <a href="http://api.worldbank.org/v2/en/indicator/NY.GDP.PCAP.CD?downloadformat=csv">another World Bank webpage</a></p>
 <p>The link loads a zipped folder but we can use the <em>unzip</em> function.</p>
 <p>The unzipped content includes some metadata files but only the main file is of interest.</p>
-<div class="highlight"><pre><span></span>GDPcapita <span class="o">&lt;-</span> read.csv<span class="p">(</span><span class="s">&quot;API_NY.GDP.PCAP.CD_DS2_en_csv_v2_10134337.csv&quot;</span><span class="p">,</span> skip <span class="o">=</span> <span class="m">4</span><span class="p">)</span> <span class="c1"># Read in countries&#39; GDP per capita data</span>
+<div class="highlight"><pre><span></span><span class="c1"># Read in countries&#39; GDP per capita data</span>
+GDPcapita <span class="o">&lt;-</span> read.csv<span class="p">(</span><span class="s">&quot;API_NY.GDP.PCAP.CD_DS2_en_csv_v2_10134337.csv&quot;</span><span class="p">,</span> skip <span class="o">=</span> <span class="m">4</span><span class="p">)</span>
 </pre></div>
 
 
 <p>For regional groupings, we will refer to the UN Statistics Division's <a href="https://unstats.un.org/unsd/methodology/m49/overview/#">methodology</a>. Click on the <em>language</em> tab of choice for options to load the data.</p>
-<div class="highlight"><pre><span></span>geogrp <span class="o">&lt;-</span> read.csv<span class="p">(</span><span class="s">&quot;UNSD — Methodology.csv&quot;</span><span class="p">)</span> <span class="c1"># Read in regional groupings data</span>
+<div class="highlight"><pre><span></span><span class="c1"># Read in regional groupings data</span>
+geogrp <span class="o">&lt;-</span> read.csv<span class="p">(</span><span class="s">&quot;UNSD — Methodology.csv&quot;</span><span class="p">)</span>
 </pre></div>
 
 
@@ -203,10 +210,15 @@ genderindex <span class="o">&lt;-</span> read.csv<span class="p">(</span><span c
 </pre></div>
 
 
-<div class="highlight"><pre><span></span>genderindex2 <span class="o">&lt;-</span> genderindex <span class="o">%&gt;%</span> gather<span class="p">(</span>Year<span class="p">,</span> Score<span class="p">,</span> X2006<span class="o">:</span>X2016<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">subset</span><span class="p">(</span>Indicator <span class="o">==</span> <span class="s">&quot;Overall Global Gender Gap Index&quot;</span> <span class="o">&amp;</span> Subindicator.Type <span class="o">==</span> <span class="s">&quot;Index&quot;</span><span class="p">)</span>  <span class="c1">#Reshape the data from &#39;wide&#39; to &#39;long&#39; form and select rows that meet conditions</span>
-genderindex2 <span class="o">&lt;-</span> genderindex2<span class="p">[,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;Country.Name&quot;</span><span class="p">,</span> <span class="s">&quot;Country.ISO3&quot;</span><span class="p">,</span><span class="s">&quot;Year&quot;</span><span class="p">,</span><span class="s">&quot;Score&quot;</span><span class="p">)]</span> <span class="c1">#Keep only columns of interest</span>
-genderindex2 <span class="o">&lt;-</span> rename<span class="p">(</span>genderindex2<span class="p">,</span> Country <span class="o">=</span> Country.Name<span class="p">,</span> Code <span class="o">=</span> Country.ISO3<span class="p">)</span> <span class="c1"># Rename  variables to keep things tidier</span>
-genderindex2<span class="o">$</span>Year <span class="o">&lt;-</span> <span class="kp">sub</span><span class="p">(</span><span class="s">&quot;^.&quot;</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="p">,</span>genderindex2<span class="o">$</span>Year<span class="p">)</span> <span class="c1"># Use regrex to remove the &#39;x&#39; in front of the year</span>
+<div class="highlight"><pre><span></span> <span class="c1">#Reshape the data from &#39;wide&#39; to &#39;long&#39; form</span>
+ <span class="c1">#Select rows that meet conditions</span>
+genderindex2 <span class="o">&lt;-</span> genderindex <span class="o">%&gt;%</span> gather<span class="p">(</span>Year<span class="p">,</span> Score<span class="p">,</span> X2006<span class="o">:</span>X2016<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">subset</span><span class="p">(</span>Indicator <span class="o">==</span> <span class="s">&quot;Overall Global Gender Gap Index&quot;</span> <span class="o">&amp;</span> Subindicator.Type <span class="o">==</span> <span class="s">&quot;Index&quot;</span><span class="p">)</span>
+<span class="c1">#Keep only columns of interest</span>
+genderindex2 <span class="o">&lt;-</span> genderindex2<span class="p">[,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;Country.Name&quot;</span><span class="p">,</span> <span class="s">&quot;Country.ISO3&quot;</span><span class="p">,</span><span class="s">&quot;Year&quot;</span><span class="p">,</span><span class="s">&quot;Score&quot;</span><span class="p">)]</span>
+ <span class="c1"># Rename  variables to keep things tidier</span>
+genderindex2 <span class="o">&lt;-</span> rename<span class="p">(</span>genderindex2<span class="p">,</span> Country <span class="o">=</span> Country.Name<span class="p">,</span> Code <span class="o">=</span> Country.ISO3<span class="p">)</span>
+<span class="c1"># Use regrex to remove the &#39;x&#39; in front of the year</span>
+genderindex2<span class="o">$</span>Year <span class="o">&lt;-</span> <span class="kp">sub</span><span class="p">(</span><span class="s">&quot;^.&quot;</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="p">,</span>genderindex2<span class="o">$</span>Year<span class="p">)</span>
 </pre></div>
 
 
@@ -228,8 +240,10 @@ genderindex2<span class="o">$</span>Year <span class="o">&lt;-</span> <span clas
 </pre></div>
 
 
-<div class="highlight"><pre><span></span>femSTEM2 <span class="o">&lt;-</span> femSTEM<span class="p">[,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;LOCATION&quot;</span><span class="p">,</span> <span class="s">&quot;Country&quot;</span><span class="p">,</span> <span class="s">&quot;Time&quot;</span><span class="p">,</span> <span class="s">&quot;Value&quot;</span><span class="p">)]</span>
-femSTEM2 <span class="o">&lt;-</span> rename<span class="p">(</span>femSTEM2<span class="p">,</span> Code <span class="o">=</span> LOCATION<span class="p">,</span> Year <span class="o">=</span> Time<span class="p">,</span> PercentageFemGrad <span class="o">=</span> Value<span class="p">)</span>
+<div class="highlight"><pre><span></span>femSTEM2 <span class="o">&lt;-</span> femSTEM<span class="p">[,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;LOCATION&quot;</span><span class="p">,</span> <span class="s">&quot;Country&quot;</span><span class="p">,</span>
+<span class="s">&quot;Time&quot;</span><span class="p">,</span> <span class="s">&quot;Value&quot;</span><span class="p">)]</span>
+femSTEM2 <span class="o">&lt;-</span> rename<span class="p">(</span>femSTEM2<span class="p">,</span> Code <span class="o">=</span> LOCATION<span class="p">,</span>
+  Year <span class="o">=</span> Time<span class="p">,</span> PercentageFemGrad <span class="o">=</span> Value<span class="p">)</span>
 femSTEM2<span class="o">$</span>Year <span class="o">&lt;-</span> <span class="kp">as.character.Date</span><span class="p">(</span>femSTEM2<span class="o">$</span>Year<span class="p">)</span>
 </pre></div>
 
@@ -306,9 +320,12 @@ femSTEM2<span class="o">$</span>Year <span class="o">&lt;-</span> <span class="k
 </pre></div>
 
 
-<div class="highlight"><pre><span></span>GDPcapita2 <span class="o">&lt;-</span> GDPcapita <span class="o">%&gt;%</span> gather<span class="p">(</span>Year<span class="p">,</span> GDPcapitaUSD<span class="p">,</span> X1960<span class="o">:</span>X2017<span class="p">)</span> <span class="o">%&gt;%</span>  rename<span class="p">(</span>Country <span class="o">=</span> Country.Name<span class="p">,</span> Code <span class="o">=</span> Country.Code<span class="p">)</span>
+<div class="highlight"><pre><span></span>GDPcapita2 <span class="o">&lt;-</span> GDPcapita <span class="o">%&gt;%</span>
+gather<span class="p">(</span>Year<span class="p">,</span> GDPcapitaUSD<span class="p">,</span> X1960<span class="o">:</span>X2017<span class="p">)</span> <span class="o">%&gt;%</span>
+rename<span class="p">(</span>Country <span class="o">=</span> Country.Name<span class="p">,</span> Code <span class="o">=</span> Country.Code<span class="p">)</span>
 GDPcapita2 <span class="o">&lt;-</span> GDPcapita2<span class="p">[,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;Country&quot;</span><span class="p">,</span> <span class="s">&quot;Code&quot;</span><span class="p">,</span> <span class="s">&quot;GDPcapitaUSD&quot;</span><span class="p">,</span><span class="s">&quot;Year&quot;</span><span class="p">)]</span>
-GDPcapita2<span class="o">$</span>Year <span class="o">&lt;-</span> <span class="kp">sub</span><span class="p">(</span><span class="s">&quot;^.&quot;</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="p">,</span>GDPcapita2<span class="o">$</span>Year<span class="p">)</span> <span class="c1"># Use regrex to remove the &#39;x&#39; in front of the year</span>
+<span class="c1"># Use regrex to remove the &#39;x&#39; in front of the year</span>
+GDPcapita2<span class="o">$</span>Year <span class="o">&lt;-</span> <span class="kp">sub</span><span class="p">(</span><span class="s">&quot;^.&quot;</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="p">,</span>GDPcapita2<span class="o">$</span>Year<span class="p">)</span>
 </pre></div>
 
 
@@ -385,21 +402,25 @@ test<span class="o">$</span>Country
 
 
 <div class="highlight"><pre><span></span>GDPcapita3 <span class="o">&lt;-</span> <span class="kp">subset</span><span class="p">(</span>GDPcapita2<span class="p">,</span> Year <span class="o">==</span> <span class="s">&quot;2016&quot;</span> <span class="o">&amp;</span> <span class="o">!</span><span class="kp">is.na</span><span class="p">(</span>GDPcapitaUSD<span class="p">))</span>
-combined2 <span class="o">&lt;-</span> <span class="kp">Reduce</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="kc">...</span><span class="p">)</span> <span class="kp">merge</span><span class="p">(</span><span class="kc">...</span><span class="p">,</span> by<span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;Code&quot;</span><span class="p">)),</span> <span class="kt">list</span><span class="p">(</span>femSTEM3<span class="p">,</span> genderindex3<span class="p">,</span>GDPcapita3<span class="p">,</span>geogrp<span class="p">))</span> <span class="c1">#Use Reduce function to merge more than 2 dataframes simultaneously</span>
+combined2 <span class="o">&lt;-</span> <span class="kp">Reduce</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="kc">...</span><span class="p">)</span> <span class="kp">merge</span><span class="p">(</span><span class="kc">...</span><span class="p">,</span> by<span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;Code&quot;</span><span class="p">)),</span> <span class="kt">list</span><span class="p">(</span>femSTEM3<span class="p">,</span> genderindex3<span class="p">,</span>GDPcapita3<span class="p">,</span>geogrp<span class="p">))</span>
+<span class="c1">#Use Reduce function to merge more than 2 dataframes simultaneously</span>
 </pre></div>
 
 
 <h2>Visualise the data</h2>
 <p>Let's start with a basic scatterplot. This <a href="http://t-redactyl.io/blog/2016/02/creating-plots-in-r-using-ggplot2-part-6-weighted-scatterplots.html">ggplot tutorial</a> by Jodie Burchell and Mauricio Vargas Sepúlveda is a major help.</p>
 <div class="highlight"><pre><span></span><span class="kn">library</span><span class="p">(</span>ggplot2<span class="p">)</span>
-p <span class="o">&lt;-</span> ggplot<span class="p">(</span>combined2<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span> PercentageFemGrad<span class="p">,</span> y <span class="o">=</span>Score<span class="p">))</span> <span class="o">+</span> geom_point<span class="p">()</span>
+p <span class="o">&lt;-</span> ggplot<span class="p">(</span>combined2<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span> PercentageFemGrad<span class="p">,</span> y <span class="o">=</span>Score<span class="p">))</span>
+<span class="o">+</span> geom_point<span class="p">()</span>
 p
 </pre></div>
 
 
 <p><img alt="center" src="/images/v2_gender_gap/unnamed-chunk-13-1.png">
 Let's weigh the points with the GDPcapitaUSD variable and change their shape to circles.</p>
-<div class="highlight"><pre><span></span>p <span class="o">&lt;-</span> ggplot<span class="p">(</span>combined2<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span> PercentageFemGrad<span class="p">,</span> y <span class="o">=</span>Score<span class="p">,</span> size <span class="o">=</span> GDPcapitaUSD<span class="p">))</span> <span class="o">+</span> geom_point<span class="p">(</span>shape <span class="o">=</span> <span class="m">21</span><span class="p">)</span>
+<div class="highlight"><pre><span></span>p <span class="o">&lt;-</span> ggplot<span class="p">(</span>combined2<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span> PercentageFemGrad<span class="p">,</span>
+  y <span class="o">=</span> Score<span class="p">,</span> size <span class="o">=</span> GDPcapitaUSD<span class="p">))</span>
+  <span class="o">+</span> geom_point<span class="p">(</span>shape <span class="o">=</span> <span class="m">21</span><span class="p">)</span>
 p
 </pre></div>
 
@@ -414,7 +435,8 @@ test_p
 <p><img alt="center" src="/images/v2_gender_gap/unnamed-chunk-15-1.png"></p>
 <p>It's harder to see what's going on so we'll retain the earlier 'zoomed in' version of the plot. Let's see if there's any regional trend by basing the colour fill of the circles on the <em>Sub.region.Name</em> variable.</p>
 <div class="highlight"><pre><span></span>p <span class="o">&lt;-</span> ggplot<span class="p">(</span>combined2<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span> PercentageFemGrad<span class="p">,</span> y <span class="o">=</span>Score<span class="p">,</span> size <span class="o">=</span> GDPcapitaUSD<span class="p">,</span> fill <span class="o">=</span> Sub.region.Name<span class="p">))</span> <span class="o">+</span> geom_point<span class="p">(</span>shape <span class="o">=</span> <span class="m">21</span><span class="p">,</span> alpha <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span>
-<span class="c1">#Add fill according to Sub.region.Name variable and adjust transparency of circles&#39; fill</span>
+<span class="c1">#Add fill according to Sub.region.Name variable</span>
+<span class="c1">#Adjust transparency of circles&#39; fill</span>
 p
 </pre></div>
 
@@ -432,7 +454,11 @@ p
 <div class="highlight"><pre><span></span>p <span class="o">&lt;-</span> ggplot<span class="p">(</span>combined2<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span> PercentageFemGrad<span class="p">,</span> y <span class="o">=</span>Score<span class="p">,</span> size <span class="o">=</span> GDPcapitaUSD<span class="p">,</span> fill <span class="o">=</span> Sub.region.Name<span class="p">))</span> <span class="o">+</span> geom_point<span class="p">(</span>shape <span class="o">=</span> <span class="m">21</span><span class="p">,</span> alpha <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span> scale_size_continuous<span class="p">(</span>range <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">))</span> <span class="o">+</span>
   <span class="c1">#Adjusts the range of the minimum and maximum point size</span>
   geom_text<span class="p">(</span>data <span class="o">=</span> <span class="kp">subset</span><span class="p">(</span>combined2<span class="p">,</span> PercentageFemGrad <span class="o">&gt;</span> <span class="m">50</span> <span class="o">|</span> Score <span class="o">&gt;</span> <span class="m">0.8</span> <span class="p">),</span> aes<span class="p">(</span>label <span class="o">=</span> Country.x<span class="p">),</span> family <span class="o">=</span> <span class="s">&quot;Georgia&quot;</span><span class="p">,</span> size <span class="o">=</span> <span class="m">2</span> <span class="p">,</span> nudge_x <span class="o">=</span> <span class="m">0.01</span><span class="p">,</span> nudge_y <span class="o">=</span> <span class="m">-0.015</span><span class="p">)</span> <span class="o">+</span>
-  <span class="c1">#Labels data points for countries where percentage of female gradutes in STEM is more than 50% or score in Gender Gap index is greater than 0.8. Adjusts positions of labels.</span>
+  <span class="c1">#Labels data points for countries where</span>
+  <span class="c1">#percentage of female graduates</span>
+  <span class="c1">#in STEM is more than 50% or score in Gender Gap index</span>
+  <span class="c1">#is greater than 0.8.</span>
+  <span class="c1">#Adjusts positions of labels.</span>
   theme_bw<span class="p">()</span> <span class="o">+</span>
   theme<span class="p">()</span> <span class="o">+</span>
   ggtitle<span class="p">(</span><span class="s">&quot;In more gender-equal countries, are women less likely to be in STEM?&quot;</span><span class="p">)</span><span class="o">+</span>
