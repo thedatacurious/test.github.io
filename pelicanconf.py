@@ -6,7 +6,7 @@ AUTHOR = 'Alexandra'
 SITENAME = 'The Data Curious'
 SITEURL = 'https://thedatacurious.github.io'
 PATH = 'content'
-STATIC_PATHS = ['extra']
+STATIC_PATHS = ['extra', 'images']
 
 EXTRA_PATH_METADATA = {
     'extra/favicon.ico': {'path': 'favicon.ico'}
