@@ -4,9 +4,14 @@ from __future__ import unicode_literals
 
 AUTHOR = 'Alexandra'
 SITENAME = 'The Data Curious'
-SITEURL = 'http://thedatacurious.github.io'
+SITEURL = 'https://thedatacurious.github.io'
 FAVICON = '/images/favicon.ico'
 PATH = 'content'
+STATIC_PATHS = ['extra']
+
+EXTRA_PATH_METADATA = {
+    'extra/favicon.ico': {'path': 'favicon.ico'}
+}
 
 TIMEZONE = 'Asia/Singapore'
 
